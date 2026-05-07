@@ -1,0 +1,104 @@
+Country_Code,Nation,Region_Code,Median_Malaria_Cases
+AFG,Afghanistan,EMR,176952.5
+DZA,Algeria,AFR,1089.0
+AGO,Angola,AFR,7199337.0
+ARG,Argentina,AMR,14.5
+ARM,Armenia,EUR,2.0
+AZE,Azerbaijan,EUR,1.0
+BGD,Bangladesh,SEAR,16896.0
+BLZ,Belize,AMR,2.0
+BEN,Benin,AFR,1954862.0
+BTN,Bhutan,SEAR,52.5
+BOL,Bolivia (Plurinational State of),AMR,9658.0
+BWA,Botswana,AFR,618.0
+BRA,Brazil,AMR,168280.0
+BFA,Burkina Faso,AFR,10536320.0
+BDI,Burundi,AFR,6387412.0
+CPV,Cabo Verde,AFR,32.0
+KHM,Cambodia,WPR,21080.5
+CMR,Cameroon,AFR,2854998.0
+CAF,Central African Republic,AFR,1791048.0
+TCD,Chad,AFR,1588361.5
+CHN,China,WPR,2588.5
+COL,Colombia,AMR,78268.0
+COM,Comoros,AFR,13080.0
+COG,Congo,AFR,149893.0
+CRI,Costa Rica,AMR,147.0
+CIV,Cote d'Ivoire,AFR,5457909.0
+PRK,Democratic People's Republic of Korea,SEAR,3429.0
+COD,Democratic Republic of the Congo,AFR,21639579.0
+DJI,Djibouti,EMR,39233.5
+DOM,Dominican Republic,AMR,572.5
+ECU,Ecuador,AMR,1545.0
+SLV,El Salvador,AMR,4.0
+GNQ,Equatorial Guinea,AFR,41701.5
+ERI,Eritrea,AFR,59534.0
+SWZ,Eswatini,AFR,528.0
+ETH,Ethiopia,AFR,1725533.0
+GUF,French Guiana,AMR,299.0
+GAB,Gabon,AFR,53420.5
+GMB,Gambia,AFR,99456.5
+GEO,Georgia,EUR,6.5
+GHA,Ghana,AFR,5552329.5
+GTM,Guatemala,AMR,2998.5
+GIN,Guinea,AFR,2076100.5
+GNB,Guinea-Bissau,AFR,154545.0
+GUY,Guyana,AMR,18028.0
+HTI,Haiti,AMR,16170.0
+HND,Honduras,AMR,2009.0
+IND,India,SEAR,296997.0
+IDN,Indonesia,WPR,257836.0
+IRN,Iran (Islamic Republic of),EMR,1025.0
+KAZ,Kazakhstan,EUR,3.0
+KEN,Kenya,AFR,4170023.0
+KGZ,Kyrgyzstan,EUR,1.0
+LAO,Lao People's Democratic Republic,WPR,5309.0
+LBR,Liberia,AFR,928778.0
+MDG,Madagascar,AFR,1332699.5
+MWI,Malawi,AFR,5497697.5
+MYS,Malaysia,WPR,3234.0
+MLI,Mali,AFR,2935198.0
+MRT,Mauritania,AFR,25893.5
+MYT,Mayotte,AFR,33.0
+MEX,Mexico,AMR,573.5
+MOZ,Mozambique,AFR,10811578.5
+MMR,Myanmar,SEAR,97582.5
+NAM,Namibia,AFR,13736.5
+NPL,Nepal,SEAR,859.5
+NIC,Nicaragua,AMR,12089.0
+NER,Niger,AFR,4151408.5
+NGA,Nigeria,AFR,19066077.5
+PAK,Pakistan,EMR,386803.5
+PAN,Panama,AMR,1901.5
+PNG,Papua New Guinea,WPR,649305.5
+PRY,Paraguay,AMR,2.5
+PER,Peru,AMR,30895.5
+PHL,Philippines,WPR,6184.0
+KOR,Republic of Korea,WPR,567.5
+RWA,Rwanda,AFR,2274593.0
+STP,Sao Tome and Principe,AFR,2412.5
+SAU,Saudi Arabia,EMR,3404.5
+SEN,Senegal,AFR,430474.0
+SLE,Sierra Leone,AFR,1771862.5
+SLB,Solomon Islands,WPR,75202.0
+SOM,Somalia,EMR,29177.0
+ZAF,South Africa,AFR,7703.0
+SSD,South Sudan,AFR,1695873.5
+LKA,Sri Lanka,SEAR,39.5
+SDN,Sudan,EMR,1077952.5
+SUR,Suriname,AMR,225.0
+TJK,Tajikistan,EUR,3.0
+THA,Thailand,SEAR,10797.0
+TLS,Timor-Leste,SEAR,9.0
+TGO,Togo,AFR,1924122.5
+TKM,Turkmenistan,EUR,0.0
+TUR,Türkiye,EUR,219.0
+UGA,Uganda,AFR,13355300.5
+TZA,United Republic of Tanzania,AFR,5323867.5
+UZB,Uzbekistan,EUR,0.0
+VUT,Vanuatu,WPR,893.5
+VEN,Venezuela (Bolivarian Republic of),AMR,213407.0
+VNM,Viet Nam,WPR,2791.5
+YEM,Yemen,EMR,156513.5
+ZMB,Zambia,AFR,6137390.5
+ZWE,Zimbabwe,AFR,287481.0
