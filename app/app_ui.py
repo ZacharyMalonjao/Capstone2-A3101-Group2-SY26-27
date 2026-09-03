@@ -7,6 +7,8 @@ import joblib
 import pandas as pd
 import streamlit as st
 
+from validation import validate_inputs
+
 # --- Load model + thresholds ---
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 
@@ -289,6 +291,8 @@ with row3_col1:
         temp = st.number_input(
             "Temperature (C)",
             value=DEFAULTS["temp"],
+            min_value=-50.0,
+            max_value=60.0,
             step=0.1,
             format="%.1f",
             label_visibility="collapsed",
@@ -333,9 +337,16 @@ if reset_clicked:
 
 if predict_clicked:
     region_code = REGIONS[region_label]
-    if region_code is None:
-        st.error("Please select a WHO epidemiological region before predicting.")
-    else:
+    errors, warnings = validate_inputs(
+        region_code, gdp, pop_density, urban_pct, sanitation_pct, rainfall, temp
+    )
+
+    for message in errors:
+        st.error(message)
+    for message in warnings:
+        st.warning(message)
+
+    if not errors:
         input_df = pd.DataFrame(
             [
                 {
