@@ -1,0 +1,25 @@
+# Virtual environments
+venv/
+test_env/
+env/
+.venv/
+ 
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+ 
+# Jupyter checkpoints
+.ipynb_checkpoints/
+ 
+# OS junk
+.DS_Store
+Thumbs.db
+ 
+# Streamlit local config/secrets (if you ever add one)
+.streamlit/secrets.toml
+ 
+# Editor folders
+.vscode/
+.idea/
+ 
