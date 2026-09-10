@@ -12,7 +12,7 @@ from validation import validate_inputs
 # --- Load model + thresholds ---
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 
-model = joblib.load(os.path.join(MODEL_DIR, "model_ElasticNet.pkl"))
+model = joblib.load(os.path.join(MODEL_DIR, "model_RandomForest.pkl"))
 thresholds = joblib.load(os.path.join(MODEL_DIR, "tier_thresholds.pkl"))
 q1, q3 = thresholds["q1"], thresholds["q3"]
 
