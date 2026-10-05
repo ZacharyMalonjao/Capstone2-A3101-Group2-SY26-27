@@ -5,6 +5,7 @@ import html
 import os
 
 import joblib
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -13,7 +14,7 @@ from validation import validate_inputs
 # --- Load model + thresholds ---
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 
-model = joblib.load(os.path.join(MODEL_DIR, "model_ElasticNet.pkl"))
+model = joblib.load(os.path.join(MODEL_DIR, "model_RandomForest.pkl"))
 thresholds = joblib.load(os.path.join(MODEL_DIR, "tier_thresholds.pkl"))
 q1, q3 = thresholds["q1"], thresholds["q3"]
 
@@ -78,7 +79,7 @@ HELP = {
     ),
     "predicted_count": (
         "Model output: estimated median malaria case count for the inputs you "
-        "provided, using the saved Elastic Net pipeline."
+        "provided, using the saved Random Forest pipeline."
     ),
     "classification": (
         "Tier label from training quartiles: below Q1 is Low, above Q3 is High, "
@@ -458,7 +459,7 @@ with row3_col1:
 
 with row3_col2:
     count_display = (
-        f"{st.session_state.prediction:,.0f} Cases"
+        f"{st.session_state.prediction:,.4f} Cases"
         if st.session_state.prediction is not None
         else "— Cases"
     )
@@ -526,7 +527,7 @@ if predict_clicked:
             ]
         )
 
-        prediction = model.predict(input_df)[0]
+        prediction = np.expm1(model.predict(input_df)[0])
 
         if prediction < q1:
             tier = "Low"

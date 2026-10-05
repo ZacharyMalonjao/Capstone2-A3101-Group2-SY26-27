@@ -1,6 +1,7 @@
 import os
 
 import joblib
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -9,7 +10,7 @@ from validation import validate_inputs
 # --- Load model + thresholds ---
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 
-model = joblib.load(os.path.join(MODEL_DIR, "model_ElasticNet.pkl"))
+model = joblib.load(os.path.join(MODEL_DIR, "model_RandomForest.pkl"))
 thresholds = joblib.load(os.path.join(MODEL_DIR, "tier_thresholds.pkl"))
 q1, q3 = thresholds["q1"], thresholds["q3"]
 
@@ -51,7 +52,7 @@ if st.button("Predict"):
             ]
         )
 
-        prediction = model.predict(input_df)[0]
+        prediction = np.expm1(model.predict(input_df)[0])
 
         if prediction < q1:
             tier = "Low"
@@ -60,5 +61,5 @@ if st.button("Predict"):
         else:
             tier = "Medium"
 
-        st.write(f"**Predicted Median Malaria Cases:** {prediction:,.0f}")
+        st.write(f"**Predicted Median Malaria Cases:** {prediction:,.4f}")
         st.write(f"**Case Count Tier:** {tier}")
