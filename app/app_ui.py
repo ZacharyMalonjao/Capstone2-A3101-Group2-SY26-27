@@ -237,15 +237,31 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     font-size: 0.95rem;
     margin: 0 0 0.15rem 0.35rem;
 }
-
-div[data-testid="stNumberInput"] input,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+div[data-testid="stNumberInput"] input {
     background-color: #7eb8da !important;
     color: #0d2a45 !important;
     border: none !important;
     border-radius: 999px !important;
     font-weight: 600;
     min-height: 42px;
+}
+div[data-testid="stSelectbox"] div[data-baseweb="select"],
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > div {
+    background-color: #7eb8da !important;
+    color: #0d2a45 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-weight: 600;
+    min-height: 42px;
+}
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] input {
+    color: #0d2a45 !important;
+    -webkit-text-fill-color: #0d2a45 !important;
+}
+div[data-testid="stSelectbox"] svg {
+    fill: #0d2a45 !important;
 }
 div[data-testid="stNumberInput"] input:focus,
 div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {
