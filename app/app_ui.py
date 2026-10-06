@@ -338,7 +338,7 @@ st.markdown(
       <span class="tip-text">{header_tip}</span>
     </span>
   </h1>
-  <p class="header-subtitle">Country-level scenario inputs for median malaria case estimation.</p>
+  <p class="header-subtitle">This tool is a calculator using Country-level scenario inputs to estimate median malaria cases (also on a country level).</p>
   <p class="a11y-hint">Hover or focus the <strong>i</strong> icons for brief field descriptions.</p>
 </div>
 """,
