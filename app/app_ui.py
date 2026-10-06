@@ -273,7 +273,12 @@ div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {
 div[data-testid="stNumberInput"] > div > div {
     background: transparent !important;
 }
-
+div[data-testid="stNumberInput"] button,
+div[data-testid="stNumberInput"] button * {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    background: transparent !important;
+}
 .results-panel {
     display: flex;
     flex-direction: column;
