@@ -130,6 +130,7 @@ st.markdown(
     max-width: 1100px;
 }
 
+
 .stApp {
     background: linear-gradient(rgba(12, 45, 82, 0.72), rgba(12, 45, 82, 0.72)),
         url('https://images.pexels.com/photos/4189472/pexels-photo-4189472.jpeg');
@@ -222,7 +223,10 @@ st.markdown(
     left: 0;
     transform: none;
 }
-
+div[data-testid="stNumberInput"] input,
+div[data-testid="stSelectbox"] * {
+    font-size: 0.9rem !important;
+}
 div[data-testid="stVerticalBlockBorderWrapper"] {
     background: rgba(26, 58, 92, 0.92) !important;
     border-color: transparent !important;
@@ -237,9 +241,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     font-size: 0.95rem;
     margin: 0 0 0.15rem 0.35rem;
 }
-
-div[data-testid="stNumberInput"] input,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+div[data-testid="stNumberInput"] input {
     background-color: #7eb8da !important;
     color: #0d2a45 !important;
     border: none !important;
@@ -247,15 +249,36 @@ div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
     font-weight: 600;
     min-height: 42px;
 }
+div[data-testid="stSelectbox"] * {
+    background-color: #7eb8da !important;
+    color: #0d2a45 !important;
+    -webkit-text-fill-color: #0d2a45 !important;
+    border-color: transparent !important;
+    font-weight: 600;
+}
+div[data-testid="stSelectbox"] * {
+    border-radius: 999px !important;
+}
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    min-height: 42px;
+    overflow: hidden;
+}
+div[data-testid="stSelectbox"] svg {
+    fill: #0d2a45 !important;
+}
 div[data-testid="stNumberInput"] input:focus,
 div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {
     box-shadow: 0 0 0 2px rgba(126, 184, 218, 0.45) !important;
 }
-div[data-testid="stNumberInput"] > div > div,
-div[data-testid="stSelectbox"] > div > div {
+div[data-testid="stNumberInput"] > div > div {
     background: transparent !important;
 }
-
+div[data-testid="stNumberInput"] button,
+div[data-testid="stNumberInput"] button * {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    background: transparent !important;
+}
 .results-panel {
     display: flex;
     flex-direction: column;
@@ -295,7 +318,8 @@ div[data-testid="stSelectbox"] > div > div {
     text-align: center;
 }
 
-.stButton > button {
+.stButton button,
+div[data-testid="stButton"] button  {
     background: #00bcd4 !important;
     color: #fff !important;
     border: none !important;
@@ -304,7 +328,8 @@ div[data-testid="stSelectbox"] > div > div {
     padding: 0.65rem 1.5rem !important;
     font-size: 1rem !important;
 }
-.stButton > button:hover {
+.stButton button:hover,
+div[data-testid="stButton"] button:hover {
     background: #00acc1 !important;
     color: #fff !important;
     border: none !important;
