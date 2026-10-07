@@ -360,6 +360,13 @@ def reset_form():
     st.session_state.reset_counter += 1
 
 
+def render_validation_messages():
+    for message in st.session_state.validation_errors:
+        st.error(message, icon="⚠️")
+    for message in st.session_state.validation_warnings:
+        st.warning(message, icon="ℹ️")
+
+
 header_tip = html.escape(HELP["header"])
 st.markdown(
     f"""
@@ -376,6 +383,8 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
+render_validation_messages()
 
 form_key = st.session_state.reset_counter
 
@@ -515,10 +524,7 @@ with row3_col2:
             unsafe_allow_html=True,
         )
 
-for message in st.session_state.validation_errors:
-    st.error(message)
-for message in st.session_state.validation_warnings:
-    st.warning(message)
+render_validation_messages()
 
 btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 1])
 with btn_col2:
@@ -544,6 +550,7 @@ if predict_clicked:
         region_code, gdp, pop_density, urban_pct, sanitation_pct, rainfall, temp
     )
     set_validation_state(st.session_state, errors, warnings)
+    render_validation_messages()
 
     if not errors:
         clear_validation_state(st.session_state)
