@@ -384,8 +384,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-render_validation_messages()
-
 form_key = st.session_state.reset_counter
 
 row1_col1, row1_col2, row1_col3 = st.columns(3)
@@ -523,8 +521,6 @@ with row3_col2:
 """,
             unsafe_allow_html=True,
         )
-
-render_validation_messages()
 
 btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 1])
 with btn_col2:
