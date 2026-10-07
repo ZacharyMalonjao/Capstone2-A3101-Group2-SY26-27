@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from validation import validate_inputs
+from validation import clear_validation_state, set_validation_state, validate_inputs
 
 # --- Load model + thresholds ---
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
@@ -321,10 +321,17 @@ if "prediction" not in st.session_state:
 if "reset_counter" not in st.session_state:
     st.session_state.reset_counter = 0
 
+if "validation_errors" not in st.session_state:
+    st.session_state.validation_errors = []
+
+if "validation_warnings" not in st.session_state:
+    st.session_state.validation_warnings = []
+
 
 def reset_form():
     st.session_state.prediction = None
     st.session_state.tier = None
+    clear_validation_state(st.session_state)
     st.session_state.reset_counter += 1
 
 
@@ -483,6 +490,11 @@ with row3_col2:
             unsafe_allow_html=True,
         )
 
+for message in st.session_state.validation_errors:
+    st.error(message)
+for message in st.session_state.validation_warnings:
+    st.warning(message)
+
 btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 1])
 with btn_col2:
     predict_clicked = st.button(
@@ -506,13 +518,10 @@ if predict_clicked:
     errors, warnings = validate_inputs(
         region_code, gdp, pop_density, urban_pct, sanitation_pct, rainfall, temp
     )
-
-    for message in errors:
-        st.error(message)
-    for message in warnings:
-        st.warning(message)
+    set_validation_state(st.session_state, errors, warnings)
 
     if not errors:
+        clear_validation_state(st.session_state)
         input_df = pd.DataFrame(
             [
                 {
