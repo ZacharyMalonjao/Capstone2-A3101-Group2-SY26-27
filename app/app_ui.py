@@ -610,6 +610,7 @@ if predict_clicked:
     render_validation_messages()
 
     if not errors:
+        clear_validation_state(st.session_state)
         input_df = pd.DataFrame(
             [
                 {
@@ -635,4 +636,3 @@ if predict_clicked:
 
         st.session_state.prediction = prediction
         st.session_state.tier = tier
-        st.rerun()
