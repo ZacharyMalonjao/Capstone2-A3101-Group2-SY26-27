@@ -26,6 +26,20 @@ def _is_finite_number(value):
     return value is not None and value == value and value not in (float("inf"), float("-inf"))
 
 
+def set_validation_state(state, errors=None, warnings=None):
+    """Persist the latest validation outcomes so they remain visible until the next calculation."""
+    state["validation_errors"] = list(errors or [])
+    state["validation_warnings"] = list(warnings or [])
+    return state
+
+
+def clear_validation_state(state):
+    """Clear any ongoing validation warnings/errors after success or reset."""
+    state["validation_errors"] = []
+    state["validation_warnings"] = []
+    return state
+
+
 def validate_inputs(region_code, gdp, pop_density, urban_pct, sanitation_pct, rainfall, temp):
     """Return (errors, warnings) for Streamlit form values."""
     errors = []

@@ -334,6 +334,42 @@ div[data-testid="stButton"] button:hover {
     color: #fff !important;
     border: none !important;
 }
+.validation-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0.25rem 0 1rem 0;
+}
+.validation-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #0b2d3d;
+}
+.validation-banner.validation-warning {
+    background: rgba(160, 210, 156, 0.72);
+    border-left: 5px solid #3b7c44;
+}
+.validation-banner.validation-error {
+    background: rgba(229, 171, 171, 0.75);
+    border-left: 5px solid #a93a3a;
+}
+.validation-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -346,11 +382,49 @@ if "prediction" not in st.session_state:
 if "reset_counter" not in st.session_state:
     st.session_state.reset_counter = 0
 
+if "validation_errors" not in st.session_state:
+    st.session_state.validation_errors = []
+
+if "validation_warnings" not in st.session_state:
+    st.session_state.validation_warnings = []
 
 def reset_form():
     st.session_state.prediction = None
     st.session_state.tier = None
+    st.session_state.validation_errors = []
+    st.session_state.validation_warnings = []
     st.session_state.reset_counter += 1
+
+def render_validation_messages():
+    combined_messages = [
+        (message, "error") for message in st.session_state.validation_errors
+    ] + [
+        (message, "warning") for message in st.session_state.validation_warnings
+    ]
+
+    if not combined_messages:
+        return
+
+    banner_html = "".join(
+        (
+            "<div class=\"validation-banner validation-{kind}\">"
+            "<span class=\"validation-icon\">{icon}</span>"
+            "<span>{message}</span>"
+            "</div>"
+        ).format(
+            kind=kind,
+            icon="⚠️" if kind == "error" else "ℹ️",
+            message=html.escape(message),
+        )
+        for message, kind in combined_messages
+    )
+
+    st.markdown(
+        f"""
+<div class="validation-stack">{banner_html}</div>
+""",
+        unsafe_allow_html=True,
+    )
 
 
 header_tip = html.escape(HELP["header"])
@@ -531,13 +605,13 @@ if predict_clicked:
     errors, warnings = validate_inputs(
         region_code, gdp, pop_density, urban_pct, sanitation_pct, rainfall, temp
     )
+    st.session_state.validation_errors = errors
+    st.session_state.validation_warnings = warnings
 
-    for message in errors:
-        st.error(message)
-    for message in warnings:
-        st.warning(message)
-
-    if not errors:
+    if errors:
+        st.session_state.prediction = None
+        st.session_state.tier = None
+    else:
         input_df = pd.DataFrame(
             [
                 {
@@ -563,4 +637,7 @@ if predict_clicked:
 
         st.session_state.prediction = prediction
         st.session_state.tier = tier
-        st.rerun()
+
+    st.rerun()
+
+render_validation_messages()
