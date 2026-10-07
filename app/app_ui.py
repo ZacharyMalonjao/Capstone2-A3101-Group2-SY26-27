@@ -553,7 +553,6 @@ if predict_clicked:
     render_validation_messages()
 
     if not errors:
-        clear_validation_state(st.session_state)
         input_df = pd.DataFrame(
             [
                 {
