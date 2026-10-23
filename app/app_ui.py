@@ -74,8 +74,8 @@ HELP = {
         "can change exposure to mosquito habitats and health services."
     ),
     "sanitation_pct": (
-        "Median share of the population with access to sanitation (%). Sanitation "
-        "is a WASH indicator linked to overall public health conditions."
+        "Median percentage of the population using at least basic sanitation "
+        "services, based on the World Bank indicator SH.STA.BASS.ZS."
     ),
     "rainfall": (
         "Median annual rainfall in millimeters. Rainfall influences mosquito "
@@ -171,6 +171,21 @@ st.markdown(
     font-size: 0.9rem;
     margin: 0.45rem 0 0;
     line-height: 1.35;
+}
+.national-level {
+    color: #7eb8da;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0.4rem 0 0;
+}
+.result-scope {
+    color: #7eb8da;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0;
+    text-align: center;
 }
 .a11y-hint {
     color: #b8d4ea;
@@ -462,12 +477,29 @@ st.markdown(
       <span class="tip-text">{header_tip}</span>
     </span>
   </h1>
-  <p class="header-subtitle">This tool is a calculator using Country-level scenario inputs to estimate median malaria cases (also on a country level).</p>
+  <p class="national-level">National-level estimate</p>
+  <p class="header-subtitle">This tool estimates malaria case counts at the country level, not for provinces or local areas.</p>
   <p class="a11y-hint">Hover or focus the <strong>i</strong> icons for brief field descriptions.</p>
 </div>
 """,
     unsafe_allow_html=True,
 )
+
+st.markdown(
+    "**How to use**\n\n"
+    "1. Select a WHO region.\n"
+    "2. Enter the six country-level indicator values.\n"
+    "3. Click **Predict**.\n"
+    "4. Review the estimated case count, tier, and tier description."
+)
+
+with st.expander("About this tool", expanded=False):
+    st.markdown(
+        "Predictions are rough estimates, which is why results are also shown as "
+        "tiers. They are based on median values from 2015–2024 for 99 countries, "
+        "using data from WHO, the World Bank, and Open-Meteo. This tool is for "
+        "research and education, not clinical or policy decisions."
+    )
 
 form_key = st.session_state.reset_counter
 
@@ -602,6 +634,7 @@ with row3_col2:
         st.markdown(
             f"""
 <div class="results-panel">
+    <p class="result-scope">National-level estimate</p>
     <div class="result-row">
         {result_label_with_tip("Predicted Case Count", HELP["predicted_count"])}
         <span class="result-pill">{count_display}</span>
