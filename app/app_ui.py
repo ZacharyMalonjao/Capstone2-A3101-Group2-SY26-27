@@ -44,6 +44,14 @@ TIER_COLORS = {
     "High": "#e74c3c",
 }
 
+TIER_DESCRIPTIONS = {
+    "Low": "Among the lowest quarter of countries in this study's dataset by estimated malaria case count.",
+    "Medium": "In the middle half of countries in this study's dataset by estimated malaria case count.",
+    "High": "Among the highest quarter of countries in this study's dataset by estimated malaria case count.",
+}
+
+TIER_NOTE = "Tiers compare countries within this study's dataset. They are not official WHO risk classifications."
+
 HELP = {
     "header": (
         "Enter country-level indicators, then click Predict. The tool estimates "
@@ -318,6 +326,23 @@ div[data-testid="stNumberInput"] button * {
     text-align: center;
 }
 
+.tier-help {
+    margin-top: 0.1rem;
+}
+.tier-desc {
+    color: #d7e9f8;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    margin: 0 0 0.35rem 0;
+}
+.tier-note {
+    color: #b8d4ea;
+    font-size: 0.76rem;
+    font-style: italic;
+    line-height: 1.35;
+    margin: 0;
+}
+
 .stButton button,
 div[data-testid="stButton"] button  {
     background: #00bcd4 !important;
@@ -564,6 +589,14 @@ with row3_col2:
     )
     tier_display = st.session_state.tier if st.session_state.tier else "—"
     tier_color = TIER_COLORS.get(st.session_state.tier, "#7eb8da")
+    tier_help_html = (
+        f'<div class="tier-help">'
+        f'<p class="tier-desc">{html.escape(TIER_DESCRIPTIONS[st.session_state.tier])}</p>'
+        f'<p class="tier-note">{html.escape(TIER_NOTE)}</p>'
+        f'</div>'
+        if st.session_state.tier
+        else ""
+    )
 
     with st.container(border=True):
         st.markdown(
@@ -576,7 +609,7 @@ with row3_col2:
     <div class="result-row">
         {result_label_with_tip("Case Count Classification", HELP["classification"])}
         <span class="tier-pill" style="background:{tier_color};">{tier_display}</span>
-    </div>
+    </div>{tier_help_html}
 </div>
 """,
             unsafe_allow_html=True,
