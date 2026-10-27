@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from validation import validate_inputs
+from validation import TRAINING_RANGES, validate_inputs
 
 # --- Load model + thresholds ---
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
@@ -52,38 +52,66 @@ TIER_DESCRIPTIONS = {
 
 TIER_NOTE = "Tiers compare countries within this study's dataset. They are not official WHO risk classifications."
 
+
+def training_range_reference(field: str, unit: str) -> str:
+    minimum, maximum = TRAINING_RANGES[field]
+    return (
+        f"Observed training-data range across 99 countries: "
+        f"{minimum:,.2f}–{maximum:,.2f} {unit}. This is a reference range, "
+        "not a recommended target."
+    )
+
+
 HELP = {
     "header": (
         "Enter country-level indicators, then click Predict. The tool estimates "
         "median malaria cases and assigns a Low, Medium, or High tier."
     ),
     "region": (
-        "WHO epidemiological region for the scenario. Region is a categorical "
-        "predictor that captures broad geographic patterns in the training data."
+        "WHO epidemiological region for the country. This is a categorical "
+        "predictor with no measurement unit or reporting period; choose the "
+        "matching WHO region."
     ),
     "gdp": (
-        "Median GDP per capita in US dollars. Higher income can reflect better "
-        "health infrastructure that influences reported malaria burden."
+        "GDP per capita in current US dollars per person per year, reported "
+        "annually. Enter the median of annual values from 2015–2024, not a "
+        "monthly amount. Higher income can reflect health infrastructure that "
+        "influences malaria burden. "
+        + training_range_reference("gdp", "USD/person/year")
     ),
     "pop_density": (
-        "Median population density (people per km²). Density relates to urbanization "
-        "and contact patterns that can affect transmission."
+        "Population density in people per km², reported annually. Enter the "
+        "median of annual values from 2015–2024; this is a density, not a "
+        "monthly or yearly count. Density relates to urbanization and contact "
+        "patterns that can affect transmission. "
+        + training_range_reference("pop_density", "people/km²")
     ),
     "urban_pct": (
-        "Median share of the population living in urban areas (%). Urbanization "
-        "can change exposure to mosquito habitats and health services."
+        "Share of the population living in urban areas, as a percentage, "
+        "reported annually. Enter the median of annual values from 2015–2024. "
+        "Urbanization can change exposure to mosquito habitats and health "
+        "services. "
+        + training_range_reference("urban_pct", "%")
     ),
     "sanitation_pct": (
-        "Median percentage of the population using at least basic sanitation "
-        "services, based on the World Bank indicator SH.STA.BASS.ZS."
+        "Percentage of the population using at least basic sanitation services "
+        "(World Bank indicator SH.STA.BASS.ZS), reported annually. Enter the "
+        "median of annual values from 2015–2024. "
+        + training_range_reference("sanitation_pct", "%")
     ),
     "rainfall": (
-        "Median annual rainfall in millimeters. Rainfall influences mosquito "
-        "breeding sites and seasonal transmission potential."
+        "Total rainfall accumulated over a full year, in millimeters per year "
+        "(not a monthly amount). Enter the median of annual totals from "
+        "2015–2024. Rainfall influences mosquito breeding sites and seasonal "
+        "transmission potential. "
+        + training_range_reference("rainfall", "mm/year")
     ),
     "temp": (
-        "Median temperature in degrees Celsius. Temperature affects mosquito "
-        "survival and malaria transmission dynamics."
+        "Annual mean temperature in degrees Celsius, calculated from daily "
+        "temperatures. Enter the median of annual means from 2015–2024. "
+        "Temperature affects mosquito survival and malaria transmission "
+        "dynamics. "
+        + training_range_reference("temp", "°C")
     ),
     "predicted_count": (
         "Model output: estimated median malaria case count for the inputs you "
@@ -222,7 +250,7 @@ st.markdown(
     left: 50%;
     transform: translateX(-50%);
     bottom: calc(100% + 8px);
-    width: 240px;
+    width: 300px;
     background: #0d2a45;
     color: #fff;
     font-size: 0.78rem;
