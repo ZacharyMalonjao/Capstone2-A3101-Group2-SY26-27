@@ -63,10 +63,6 @@ def training_range_reference(field: str, unit: str) -> str:
 
 
 HELP = {
-    "header": (
-        "Enter country-level indicators, then click Predict. The tool estimates "
-        "median malaria cases and assigns a Low, Medium, or High tier."
-    ),
     "region": (
         "WHO epidemiological region for the country. This is a categorical "
         "predictor with no measurement unit or reporting period; choose the "
@@ -113,39 +109,9 @@ HELP = {
         "dynamics. "
         + training_range_reference("temp", "°C")
     ),
-    "predicted_count": (
-        "Model output: estimated median malaria case count for the inputs you "
-        "provided, using the saved Random Forest pipeline."
-    ),
-    "classification": (
-        "Tier label from training quartiles: below Q1 is Low, above Q3 is High, "
-        "otherwise Medium."
-    ),
     "predict_btn": "Validate inputs, run the model, and update the results panel.",
     "reset_btn": "Clear results and restore default example values in all fields.",
 }
-
-
-def label_with_tip(title: str, tip: str) -> str:
-    safe_title = html.escape(title)
-    safe_tip = html.escape(tip)
-    return (
-        f'<p class="card-label">{safe_title}'
-        f'<span class="info-tip" tabindex="0" role="button" aria-label="Help: {safe_title}">'
-        f'<span class="info-icon" aria-hidden="true">i</span>'
-        f'<span class="tip-text">{safe_tip}</span></span></p>'
-    )
-
-
-def result_label_with_tip(title: str, tip: str) -> str:
-    safe_title = html.escape(title)
-    safe_tip = html.escape(tip)
-    return (
-        f'<span class="result-label">{safe_title}'
-        f'<span class="info-tip" tabindex="0" role="button" aria-label="Help: {safe_title}">'
-        f'<span class="info-icon" aria-hidden="true">i</span>'
-        f'<span class="tip-text">{safe_tip}</span></span></span>'
-    )
 
 
 st.set_page_config(
@@ -168,16 +134,12 @@ st.markdown(
 
 
 .stApp {
-    background: linear-gradient(rgba(12, 45, 82, 0.72), rgba(12, 45, 82, 0.72)),
-        url('https://images.pexels.com/photos/4189472/pexels-photo-4189472.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: #071523;
     font-family: 'Inter', sans-serif;
 }
 
 .header-bar {
-    background: #000;
+    background: #030b13;
     border-radius: 14px;
     padding: 1.1rem 1.5rem;
     text-align: center;
@@ -195,20 +157,20 @@ st.markdown(
     justify-content: center;
 }
 .header-subtitle {
-    color: #d7e9f8;
+    color: #e2edf7;
     font-size: 0.9rem;
     margin: 0.45rem 0 0;
     line-height: 1.35;
 }
 .national-level {
-    color: #7eb8da;
+    color: #9bdcf0;
     font-size: 0.82rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     margin: 0.4rem 0 0;
 }
 .result-scope {
-    color: #7eb8da;
+    color: #9bdcf0;
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -216,94 +178,37 @@ st.markdown(
     text-align: center;
 }
 .a11y-hint {
-    color: #b8d4ea;
+    color: #d2e2ef;
     font-size: 0.78rem;
     margin-top: 0.35rem;
 }
 
-.info-tip {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 0.35rem;
-    vertical-align: middle;
-    cursor: help;
-    outline: none;
-}
-.info-icon {
-    width: 1.05rem;
-    height: 1.05rem;
-    border-radius: 999px;
-    background: #7eb8da;
-    color: #0d2a45;
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1.05rem;
-    text-align: center;
-    display: inline-block;
-}
-.tip-text {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: calc(100% + 8px);
-    width: 300px;
-    background: #0d2a45;
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1.35;
-    padding: 0.55rem 0.65rem;
-    border-radius: 8px;
-    text-align: left;
-    z-index: 1000;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-    pointer-events: none;
-    transition: opacity 0.15s ease;
-}
-.info-tip:hover .tip-text,
-.info-tip:focus .tip-text,
-.info-tip:focus-visible .tip-text {
-    visibility: visible;
-    opacity: 1;
-}
-.result-label .info-tip .tip-text {
-    left: 0;
-    transform: none;
-}
 div[data-testid="stNumberInput"] input,
 div[data-testid="stSelectbox"] * {
     font-size: 0.9rem !important;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] {
-    background: rgba(26, 58, 92, 0.92) !important;
+    background: #10283d !important;
     border-color: transparent !important;
     border-radius: 16px !important;
     padding: 0.35rem 0.15rem 0.15rem !important;
     margin-bottom: 0.75rem;
+    overflow: visible !important;
 }
 
-.card-label {
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin: 0 0 0.15rem 0.35rem;
-}
 div[data-testid="stNumberInput"] input {
-    background-color: #7eb8da !important;
-    color: #0d2a45 !important;
+    background-color: #e3edf4 !important;
+    color: #10283d !important;
     border: none !important;
     border-radius: 999px !important;
     font-weight: 600;
     min-height: 42px;
 }
-div[data-testid="stSelectbox"] * {
-    background-color: #7eb8da !important;
-    color: #0d2a45 !important;
-    -webkit-text-fill-color: #0d2a45 !important;
+div[data-testid="stSelectbox"] [data-baseweb="select"],
+div[data-testid="stSelectbox"] [data-baseweb="select"] * {
+    background-color: #e3edf4 !important;
+    color: #10283d !important;
+    -webkit-text-fill-color: #10283d !important;
     border-color: transparent !important;
     font-weight: 600;
 }
@@ -315,7 +220,7 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
     overflow: hidden;
 }
 div[data-testid="stSelectbox"] svg {
-    fill: #0d2a45 !important;
+    fill: #10283d !important;
 }
 div[data-testid="stNumberInput"] input:focus,
 div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {
@@ -324,11 +229,14 @@ div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {
 div[data-testid="stNumberInput"] > div > div {
     background: transparent !important;
 }
-div[data-testid="stNumberInput"] button,
-div[data-testid="stNumberInput"] button * {
+div[data-testid="stNumberInput"] button[aria-label="Decrement"],
+div[data-testid="stNumberInput"] button[aria-label="Increment"] {
     color: #ffffff !important;
-    fill: #ffffff !important;
     background: transparent !important;
+}
+div[data-testid="stNumberInput"] button[aria-label="Decrement"] svg,
+div[data-testid="stNumberInput"] button[aria-label="Increment"] svg {
+    fill: #ffffff !important;
 }
 .results-panel {
     display: flex;
@@ -351,8 +259,8 @@ div[data-testid="stNumberInput"] button * {
     line-height: 1.25;
 }
 .result-pill {
-    background: #7eb8da;
-    color: #0d2a45;
+    background: #e3edf4;
+    color: #10283d;
     font-weight: 700;
     border-radius: 999px;
     padding: 0.55rem 1.25rem;
@@ -373,13 +281,13 @@ div[data-testid="stNumberInput"] button * {
     margin-top: 0.1rem;
 }
 .tier-desc {
-    color: #d7e9f8;
+    color: #e2edf7;
     font-size: 0.88rem;
     line-height: 1.4;
     margin: 0 0 0.35rem 0;
 }
 .tier-note {
-    color: #b8d4ea;
+    color: #d2e2ef;
     font-size: 0.76rem;
     font-style: italic;
     line-height: 1.35;
@@ -388,7 +296,7 @@ div[data-testid="stNumberInput"] button * {
 
 .stButton button,
 div[data-testid="stButton"] button  {
-    background: #00bcd4 !important;
+    background: #006b78 !important;
     color: #fff !important;
     border: none !important;
     border-radius: 10px !important;
@@ -398,7 +306,7 @@ div[data-testid="stButton"] button  {
 }
 .stButton button:hover,
 div[data-testid="stButton"] button:hover {
-    background: #00acc1 !important;
+    background: #005762 !important;
     color: #fff !important;
     border: none !important;
 }
@@ -495,19 +403,13 @@ def render_validation_messages():
     )
 
 
-header_tip = html.escape(HELP["header"])
 st.markdown(
-    f"""
+    """
 <div class="header-bar">
-  <h1>Malaria Case Prediction Tool
-    <span class="info-tip" tabindex="0" role="button" aria-label="About this tool">
-      <span class="info-icon" aria-hidden="true">i</span>
-      <span class="tip-text">{header_tip}</span>
-    </span>
-  </h1>
+  <h1>Malaria Case Prediction Tool</h1>
   <p class="national-level">National-level estimate</p>
   <p class="header-subtitle">This tool estimates malaria case counts at the country level, not for provinces or local areas.</p>
-  <p class="a11y-hint">Hover or focus the <strong>i</strong> icons for brief field descriptions.</p>
+  <p class="a11y-hint">Use the help icon beside each input for field definitions and units.</p>
 </div>
 """,
     unsafe_allow_html=True,
@@ -517,8 +419,8 @@ st.markdown(
     "**How to use**\n\n"
     "1. Select a WHO region.\n"
     "2. Enter the six country-level indicator values.\n"
-    "3. Click **Predict**.\n"
-    "4. Review the estimated case count, tier, and tier description."
+    "3. Click **Predict** below the input grid.\n"
+    "4. Review the estimated case count and tier in the results panel."
 )
 
 with st.expander("About this tool", expanded=False):
@@ -533,102 +435,77 @@ form_key = st.session_state.reset_counter
 
 row1_col1, row1_col2, row1_col3 = st.columns(3)
 row2_col1, row2_col2, row2_col3 = st.columns(3)
-row3_col1, row3_col2 = st.columns([1, 2])
+row3_col1, row3_col2, row3_col3 = st.columns(3)
 
 with row1_col1:
     with st.container(border=True):
-        st.markdown(
-            label_with_tip("WHO Epidemiological Region", HELP["region"]),
-            unsafe_allow_html=True,
-        )
         region_label = st.selectbox(
             "WHO Epidemiological Region",
             list(REGIONS.keys()),
             index=list(REGIONS.keys()).index(DEFAULTS["region_label"]),
-            label_visibility="collapsed",
             help=HELP["region"],
             key=f"region_{form_key}",
         )
 
 with row1_col2:
     with st.container(border=True):
-        st.markdown(label_with_tip("GDP (USD)", HELP["gdp"]), unsafe_allow_html=True)
         gdp = st.number_input(
             "GDP (USD)",
             value=DEFAULTS["gdp"],
             min_value=0.0,
             step=100.0,
-            label_visibility="collapsed",
             help=HELP["gdp"],
             key=f"gdp_{form_key}",
         )
 
 with row1_col3:
     with st.container(border=True):
-        st.markdown(
-            label_with_tip("Population Density (p/km²)", HELP["pop_density"]),
-            unsafe_allow_html=True,
-        )
         pop_density = st.number_input(
             "Population Density (p/km²)",
             value=DEFAULTS["pop_density"],
             min_value=0.0,
             step=1.0,
-            label_visibility="collapsed",
             help=HELP["pop_density"],
             key=f"pop_density_{form_key}",
         )
 
 with row2_col1:
     with st.container(border=True):
-        st.markdown(
-            label_with_tip("Urban population (%)", HELP["urban_pct"]),
-            unsafe_allow_html=True,
-        )
         urban_pct = st.number_input(
             "Urban population (%)",
             value=DEFAULTS["urban_pct"],
             min_value=0.0,
             max_value=100.0,
             step=1.0,
-            label_visibility="collapsed",
             help=HELP["urban_pct"],
             key=f"urban_pct_{form_key}",
         )
 
 with row2_col2:
     with st.container(border=True):
-        st.markdown(
-            label_with_tip("Sanitation access (%)", HELP["sanitation_pct"]),
-            unsafe_allow_html=True,
-        )
         sanitation_pct = st.number_input(
             "Sanitation access (%)",
             value=DEFAULTS["sanitation_pct"],
             min_value=0.0,
             max_value=100.0,
             step=1.0,
-            label_visibility="collapsed",
             help=HELP["sanitation_pct"],
             key=f"sanitation_pct_{form_key}",
         )
 
 with row2_col3:
     with st.container(border=True):
-        st.markdown(label_with_tip("Rainfall (mm)", HELP["rainfall"]), unsafe_allow_html=True)
         rainfall = st.number_input(
             "Rainfall (mm)",
             value=DEFAULTS["rainfall"],
             min_value=0.0,
             step=10.0,
-            label_visibility="collapsed",
             help=HELP["rainfall"],
             key=f"rainfall_{form_key}",
         )
 
-with row3_col1:
+with row3_col2:
     with st.container(border=True):
-        st.markdown(label_with_tip("Temperature (C)", HELP["temp"]), unsafe_allow_html=True)
         temp = st.number_input(
             "Temperature (C)",
             value=DEFAULTS["temp"],
@@ -636,59 +513,59 @@ with row3_col1:
             max_value=60.0,
             step=0.1,
             format="%.1f",
-            label_visibility="collapsed",
             help=HELP["temp"],
             key=f"temp_{form_key}",
         )
 
-with row3_col2:
-    count_display = (
-        f"{st.session_state.prediction:,.4f} Cases"
-        if st.session_state.prediction is not None
-        else "— Cases"
+button_spacer_left, predict_col, reset_col, button_spacer_right = st.columns(4)
+with predict_col:
+    predict_clicked = st.button(
+        "Predict",
+        width="stretch",
+        help=HELP["predict_btn"],
     )
-    tier_display = st.session_state.tier if st.session_state.tier else "—"
-    tier_color = TIER_COLORS.get(st.session_state.tier, "#7eb8da")
-    tier_help_html = (
-        f'<div class="tier-help">'
-        f'<p class="tier-desc">{html.escape(TIER_DESCRIPTIONS[st.session_state.tier])}</p>'
-        f'<p class="tier-note">{html.escape(TIER_NOTE)}</p>'
-        f'</div>'
-        if st.session_state.tier
-        else ""
+with reset_col:
+    reset_clicked = st.button(
+        "Reset",
+        width="stretch",
+        help=HELP["reset_btn"],
     )
 
+count_display = (
+    f"{st.session_state.prediction:,.0f} Cases"
+    if st.session_state.prediction is not None
+    else "— Cases"
+)
+tier_display = st.session_state.tier if st.session_state.tier else "—"
+tier_color = TIER_COLORS.get(st.session_state.tier, "#9bdcf0")
+tier_help_html = (
+    f'<div class="tier-help">'
+    f'<p class="tier-desc">{html.escape(TIER_DESCRIPTIONS[st.session_state.tier])}</p>'
+    f'<p class="tier-note">{html.escape(TIER_NOTE)}</p>'
+    f'</div>'
+    if st.session_state.tier
+    else ""
+)
+
+result_spacer_left, result_col, result_spacer_right = st.columns([1, 3, 1])
+with result_col:
     with st.container(border=True):
         st.markdown(
             f"""
 <div class="results-panel">
     <p class="result-scope">National-level estimate</p>
     <div class="result-row">
-        {result_label_with_tip("Predicted Case Count", HELP["predicted_count"])}
+        <span class="result-label">Predicted Case Count</span>
         <span class="result-pill">{count_display}</span>
     </div>
     <div class="result-row">
-        {result_label_with_tip("Case Count Classification", HELP["classification"])}
+        <span class="result-label">Case Count Classification</span>
         <span class="tier-pill" style="background:{tier_color};">{tier_display}</span>
     </div>{tier_help_html}
 </div>
 """,
             unsafe_allow_html=True,
         )
-
-btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 1])
-with btn_col2:
-    predict_clicked = st.button(
-        "Predict",
-        use_container_width=True,
-        help=HELP["predict_btn"],
-    )
-with btn_col3:
-    reset_clicked = st.button(
-        "Reset",
-        use_container_width=True,
-        help=HELP["reset_btn"],
-    )
 
 if reset_clicked:
     reset_form()
