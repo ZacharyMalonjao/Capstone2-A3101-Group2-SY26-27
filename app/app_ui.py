@@ -129,9 +129,8 @@ st.markdown(
 .block-container {
     padding-top: 1.5rem;
     padding-bottom: 2rem;
-    max-width: 1100px;
+    max-width: 1400px;
 }
-
 
 .stApp {
     background: #071523;
@@ -156,6 +155,14 @@ st.markdown(
     gap: 0.35rem;
     justify-content: center;
 }
+.header-bar {
+    background: #030b13;
+    border: 2px solid #ffffff;
+    border-radius: 14px;
+    padding: 1.1rem 1.5rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
 .header-subtitle {
     color: #e2edf7;
     font-size: 0.9rem;
@@ -177,6 +184,12 @@ st.markdown(
     margin: 0;
     text-align: center;
 }
+.how-to {
+    color: #d2e2ef;
+    font-size: 0.9rem;
+    margin: 0 0 0.9rem 0;
+}
+
 .a11y-hint {
     color: #d2e2ef;
     font-size: 0.78rem;
@@ -346,6 +359,17 @@ div[data-testid="stButton"] button:hover {
     border-radius: 50%;
     background: rgba(255,255,255,0.35);
 }
+
+div[data-testid="stTooltipContent"] {
+    max-width: min(22rem, calc(100vw - 2rem)) !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+div[data-baseweb="popover"] {
+    max-width: calc(100vw - 1rem) !important;
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -416,11 +440,10 @@ st.markdown(
 )
 
 st.markdown(
-    "**How to use**\n\n"
-    "1. Select a WHO region.\n"
-    "2. Enter the six country-level indicator values.\n"
-    "3. Click **Predict** below the input grid.\n"
-    "4. Review the estimated case count and tier in the results panel."
+    '<p class="how-to"><b>How to use:</b> select a WHO region, enter the six '
+    "country-level indicator values, click <b>Predict</b>, then read the "
+    "estimate in the results panel.</p>",
+    unsafe_allow_html=True,
 )
 
 with st.expander("About this tool", expanded=False):
@@ -432,104 +455,6 @@ with st.expander("About this tool", expanded=False):
     )
 
 form_key = st.session_state.reset_counter
-
-row1_col1, row1_col2, row1_col3 = st.columns(3)
-row2_col1, row2_col2, row2_col3 = st.columns(3)
-row3_col1, row3_col2, row3_col3 = st.columns(3)
-
-with row1_col1:
-    with st.container(border=True):
-        region_label = st.selectbox(
-            "WHO Epidemiological Region",
-            list(REGIONS.keys()),
-            index=list(REGIONS.keys()).index(DEFAULTS["region_label"]),
-            help=HELP["region"],
-            key=f"region_{form_key}",
-        )
-
-with row1_col2:
-    with st.container(border=True):
-        gdp = st.number_input(
-            "GDP (USD)",
-            value=DEFAULTS["gdp"],
-            min_value=0.0,
-            step=100.0,
-            help=HELP["gdp"],
-            key=f"gdp_{form_key}",
-        )
-
-with row1_col3:
-    with st.container(border=True):
-        pop_density = st.number_input(
-            "Population Density (p/km²)",
-            value=DEFAULTS["pop_density"],
-            min_value=0.0,
-            step=1.0,
-            help=HELP["pop_density"],
-            key=f"pop_density_{form_key}",
-        )
-
-with row2_col1:
-    with st.container(border=True):
-        urban_pct = st.number_input(
-            "Urban population (%)",
-            value=DEFAULTS["urban_pct"],
-            min_value=0.0,
-            max_value=100.0,
-            step=1.0,
-            help=HELP["urban_pct"],
-            key=f"urban_pct_{form_key}",
-        )
-
-with row2_col2:
-    with st.container(border=True):
-        sanitation_pct = st.number_input(
-            "Sanitation access (%)",
-            value=DEFAULTS["sanitation_pct"],
-            min_value=0.0,
-            max_value=100.0,
-            step=1.0,
-            help=HELP["sanitation_pct"],
-            key=f"sanitation_pct_{form_key}",
-        )
-
-with row2_col3:
-    with st.container(border=True):
-        rainfall = st.number_input(
-            "Rainfall (mm)",
-            value=DEFAULTS["rainfall"],
-            min_value=0.0,
-            step=10.0,
-            help=HELP["rainfall"],
-            key=f"rainfall_{form_key}",
-        )
-
-with row3_col2:
-    with st.container(border=True):
-        temp = st.number_input(
-            "Temperature (C)",
-            value=DEFAULTS["temp"],
-            min_value=-50.0,
-            max_value=60.0,
-            step=0.1,
-            format="%.1f",
-            help=HELP["temp"],
-            key=f"temp_{form_key}",
-        )
-
-button_spacer_left, predict_col, reset_col, button_spacer_right = st.columns(4)
-with predict_col:
-    predict_clicked = st.button(
-        "Predict",
-        width="stretch",
-        help=HELP["predict_btn"],
-    )
-with reset_col:
-    reset_clicked = st.button(
-        "Reset",
-        width="stretch",
-        help=HELP["reset_btn"],
-    )
 
 count_display = (
     f"{st.session_state.prediction:,.0f} Cases"
@@ -546,9 +471,123 @@ tier_help_html = (
     if st.session_state.tier
     else ""
 )
+empty_note_html = ""
+if st.session_state.prediction is None:
+    empty_msg = (
+        "No prediction yet. Fix the inputs on the left and try again."
+        if st.session_state.validation_errors
+        else "Enter values and click Predict."
+    )
+    empty_note_html = f'<p class="tier-desc">{empty_msg}</p>'
 
-result_spacer_left, result_col, result_spacer_right = st.columns([1, 3, 1])
-with result_col:
+left, right = st.columns([3, 2], gap="large")
+
+# 1. INPUTS 
+with left:
+    row1_col1, row1_col2, row1_col3 = st.columns(3)
+    row2_col1, row2_col2, row2_col3 = st.columns(3)
+    row3_col1, row3_col2, row3_col3 = st.columns(3)
+
+    with row1_col1:
+        with st.container(border=True):
+            region_label = st.selectbox(
+                "WHO Epidemiological Region",
+                list(REGIONS.keys()),
+                index=list(REGIONS.keys()).index(DEFAULTS["region_label"]),
+                help=HELP["region"],
+                key=f"region_{form_key}",
+            )
+
+    with row1_col2:
+        with st.container(border=True):
+            gdp = st.number_input(
+                "GDP (USD)",
+                value=DEFAULTS["gdp"],
+                min_value=0.0,
+                step=100.0,
+                help=HELP["gdp"],
+                key=f"gdp_{form_key}",
+            )
+
+    with row1_col3:
+        with st.container(border=True):
+            pop_density = st.number_input(
+                "Population Density (p/km²)",
+                value=DEFAULTS["pop_density"],
+                min_value=0.0,
+                step=1.0,
+                help=HELP["pop_density"],
+                key=f"pop_density_{form_key}",
+            )
+
+    with row2_col1:
+        with st.container(border=True):
+            urban_pct = st.number_input(
+                "Urban population (%)",
+                value=DEFAULTS["urban_pct"],
+                min_value=0.0,
+                max_value=100.0,
+                step=1.0,
+                help=HELP["urban_pct"],
+                key=f"urban_pct_{form_key}",
+            )
+
+    with row2_col2:
+        with st.container(border=True):
+            sanitation_pct = st.number_input(
+                "Sanitation access (%)",
+                value=DEFAULTS["sanitation_pct"],
+                min_value=0.0,
+                max_value=100.0,
+                step=1.0,
+                help=HELP["sanitation_pct"],
+                key=f"sanitation_pct_{form_key}",
+            )
+
+    with row2_col3:
+        with st.container(border=True):
+            rainfall = st.number_input(
+                "Rainfall (mm)",
+                value=DEFAULTS["rainfall"],
+                min_value=0.0,
+                step=10.0,
+                help=HELP["rainfall"],
+                key=f"rainfall_{form_key}",
+            )
+
+    with row3_col1:
+        with st.container(border=True):
+            temp = st.number_input(
+                "Temperature (C)",
+                value=DEFAULTS["temp"],
+                min_value=-50.0,
+                max_value=60.0,
+                step=0.1,
+                format="%.1f",
+                help=HELP["temp"],
+                key=f"temp_{form_key}",
+            )
+
+   
+
+# 2. ACTION + 3. RESULT
+with right:
+    predict_col, reset_col = st.columns(2)
+    with predict_col:
+        predict_clicked = st.button(
+            "Predict",
+            width="stretch",
+            help=HELP["predict_btn"],
+        )
+    with reset_col:
+        reset_clicked = st.button(
+            "Reset",
+            width="stretch",
+            help=HELP["reset_btn"],
+        )
+
+    render_validation_messages()
+
     with st.container(border=True):
         st.markdown(
             f"""
@@ -561,7 +600,7 @@ with result_col:
     <div class="result-row">
         <span class="result-label">Case Count Classification</span>
         <span class="tier-pill" style="background:{tier_color};">{tier_display}</span>
-    </div>{tier_help_html}
+    </div>{tier_help_html}{empty_note_html}
 </div>
 """,
             unsafe_allow_html=True,
@@ -610,5 +649,3 @@ if predict_clicked:
         st.session_state.tier = tier
 
     st.rerun()
-
-render_validation_messages()
