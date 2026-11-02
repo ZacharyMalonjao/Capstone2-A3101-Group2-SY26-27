@@ -484,21 +484,19 @@ left, right = st.columns([3, 2], gap="large")
 
 # 1. INPUTS 
 with left:
+    with st.container(border=True):
+        region_label = st.selectbox(
+            "WHO Epidemiological Region",
+            list(REGIONS.keys()),
+            index=list(REGIONS.keys()).index(DEFAULTS["region_label"]),
+            help=HELP["region"],
+            key=f"region_{form_key}",
+        )
+
     row1_col1, row1_col2, row1_col3 = st.columns(3)
     row2_col1, row2_col2, row2_col3 = st.columns(3)
-    row3_col1, row3_col2, row3_col3 = st.columns(3)
 
     with row1_col1:
-        with st.container(border=True):
-            region_label = st.selectbox(
-                "WHO Epidemiological Region",
-                list(REGIONS.keys()),
-                index=list(REGIONS.keys()).index(DEFAULTS["region_label"]),
-                help=HELP["region"],
-                key=f"region_{form_key}",
-            )
-
-    with row1_col2:
         with st.container(border=True):
             gdp = st.number_input(
                 "GDP (USD)",
@@ -509,7 +507,7 @@ with left:
                 key=f"gdp_{form_key}",
             )
 
-    with row1_col3:
+    with row1_col2:
         with st.container(border=True):
             pop_density = st.number_input(
                 "Population Density (p/km²)",
@@ -520,7 +518,7 @@ with left:
                 key=f"pop_density_{form_key}",
             )
 
-    with row2_col1:
+    with row1_col3:
         with st.container(border=True):
             urban_pct = st.number_input(
                 "Urban population (%)",
@@ -532,7 +530,7 @@ with left:
                 key=f"urban_pct_{form_key}",
             )
 
-    with row2_col2:
+    with row2_col1:
         with st.container(border=True):
             sanitation_pct = st.number_input(
                 "Sanitation access (%)",
@@ -544,7 +542,7 @@ with left:
                 key=f"sanitation_pct_{form_key}",
             )
 
-    with row2_col3:
+    with row2_col2:
         with st.container(border=True):
             rainfall = st.number_input(
                 "Rainfall (mm)",
@@ -555,7 +553,7 @@ with left:
                 key=f"rainfall_{form_key}",
             )
 
-    with row3_col1:
+    with row2_col3:
         with st.container(border=True):
             temp = st.number_input(
                 "Temperature (C)",
@@ -567,7 +565,6 @@ with left:
                 help=HELP["temp"],
                 key=f"temp_{form_key}",
             )
-
    
 
 # 2. ACTION + 3. RESULT
