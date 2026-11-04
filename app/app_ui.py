@@ -370,6 +370,29 @@ div[data-testid="stTooltipContent"] {
 div[data-baseweb="popover"] {
     max-width: calc(100vw - 1rem) !important;
 }
+@media (max-width: 480px) {
+    .block-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .header-bar {
+        padding: 1rem;
+    }
+    .header-bar h1 {
+        font-size: 1.5rem;
+    }
+    .result-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .result-pill,
+    .tier-pill {
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
 </style>
 """,
     unsafe_allow_html=True,
