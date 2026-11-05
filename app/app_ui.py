@@ -393,6 +393,11 @@ div[data-baseweb="popover"] {
         max-width: 100%;
     }
 }
+@media (min-width: 481px) {
+    .results-panel {
+        min-height: 277px;
+    }
+}
 </style>
 """,
     unsafe_allow_html=True,
