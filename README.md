@@ -6,17 +6,13 @@ The project combines **Python data preparation, statistical analysis, and machin
 
 ## Key Findings
 
-* **Random Forest** achieved the best cross-validated performance, with a mean R² of **0.5956** on the log scale.
-* The Random Forest model achieved **90% tier classification accuracy**, correctly classifying 18 out of 20 held-out countries.
-* Random Forest correctly identified **all 6 High-burden countries** in the test set.
-* **Sanitation access** emerged as the most consistently influential factor across all five regression models and was statistically significant in OLS regression.
-* European countries had significantly lower malaria case counts than the African reference region.
-* Rainfall, temperature, GDP per capita, population density, and urbanization were not statistically significant predictors in the OLS analysis.
-* Adding total population as a sensitivity-analysis predictor improved Random Forest's cross-validated R² from **0.596 to 0.649**.
-* The results suggest that reporting predictions through **Low, Medium, and High tiers** is more appropriate than relying on exact case-count estimates, given the substantial prediction errors.
-
-These findings are promising but should be interpreted cautiously because of the relatively small dataset and the variability in model performance.
-
+* **Sanitation access was the strongest indicator of malaria case burden.** Countries with better access to sanitation generally had lower malaria case counts. This suggests that sanitation conditions are worth monitoring when assessing public health risks, although the analysis does not prove that better sanitation directly causes fewer malaria cases.
+* **The model successfully identified 90% of countries' malaria burden categories.** Random Forest correctly classified 18 out of 20 test countries into Low, Medium, or High categories, including all 6 high-burden countries. This demonstrates its potential as a tool for preliminary public health assessment.
+* **Geographic differences were more noticeable than climate patterns.** European countries generally had lower malaria case counts than African countries in the analysis. Rainfall and temperature, however, did not show statistically significant relationships with case counts at the country level.
+* **Population size matters when comparing countries.** Adding total population to the analysis improved the Random Forest model's performance, suggesting that the number of people living in a country provides additional information when estimating its malaria burden.
+* **Malaria burden categories are more useful than exact predictions.** The model's estimated case counts could differ substantially from actual figures. Presenting results as Low, Medium, or High therefore provides a more practical and understandable way to compare countries without implying that the model can predict exact case counts.
+* **The application was positively received during usability testing.** Three participants gave the application an average rating of 4.24 out of 5, with interface and design receiving the highest rating of 4.73. This highlights the importance of presenting analytical results through an accessible interface, not just developing an accurate model.
+* 
 ## Application
 
 The final Streamlit application allows users to enter country-level demographic, socioeconomic, and climatic indicators to estimate relative malaria case burden.
