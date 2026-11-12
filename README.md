@@ -158,4 +158,340 @@ One-hot encoding and standardization were incorporated into the machine learning
 
 The Q1 and Q3 tier thresholds were calculated using the raw training-set malaria case counts only.
 
-Encoding, scaling, and
+Encoding, scaling, and threshold calculations were fitted using training data to prevent information leakage from the test set.
+
+### Features Investigated and Rejected
+
+Two additional variables were investigated but were not included in the final deployed model:
+
+* **ITN coverage:** Excluded because of insufficient country coverage and missing observations concentrated in high-burden countries.
+* **Health expenditure per capita:** Excluded because of high multicollinearity with GDP, with a VIF of approximately 13.
+
+The resulting dataset was used for statistical analysis, model training, and evaluation.
+
+---
+
+# Analysis & Visualization
+
+The prepared dataset was analyzed using statistical methods and machine learning to identify relationships between national malaria case burden and the selected predictors.
+
+### Exploratory Data Analysis
+
+Exploratory analysis was conducted to understand the distribution and relationships of the variables.
+
+The analysis included:
+
+* Distribution analysis of malaria case counts
+* Pearson and Spearman correlation analysis
+* Predictor relationship assessment
+* Multicollinearity screening using VIF
+
+Malaria case counts exhibited substantial right skewness, with a median of approximately 25,890 cases compared with a mean of approximately 1.57 million.
+
+Because of this distribution, the target variable was transformed using `log1p` during model training.
+
+### Statistical Analysis
+
+Ordinary Least Squares (OLS) regression was used to examine the statistical significance of the selected predictors.
+
+The analysis was conducted across all 99 countries using the log-transformed malaria case-count target.
+
+The resulting model achieved:
+
+* **R²:** 0.698
+* **Adjusted R²:** 0.660
+* **F-statistic:** 18.27
+* **Significance:** p < .001
+
+Sanitation access and the European region were statistically significant predictors at α = .05.
+
+### Model Development
+
+Six regression models were developed and compared:
+
+* Median Baseline
+* Multiple Linear Regression (MLR)
+* Ridge Regression
+* Lasso Regression
+* Elastic Net Regression
+* Random Forest Regression
+
+Random Forest was included as a non-linear benchmark against the linear regression models.
+
+The models were evaluated using an 80/20 training-test split, with 79 countries for training and 20 countries for testing.
+
+Ridge, Lasso, and Elastic Net hyperparameters were selected through inner 5-fold cross-validation on the training data.
+
+Repeated 5×5 cross-validation was also used for model comparison.
+
+### Model Performance
+
+The following results were obtained through repeated 5×5 cross-validation on the log-transformed target:
+
+| Model | Mean R² | Mean RMSE | Mean MAE |
+|---|---:|---:|---:|
+| Random Forest | 0.5956 | 2.8155 | 2.2237 |
+| Elastic Net | 0.5361 | 2.9305 | 2.3503 |
+| Ridge | 0.5286 | 2.9366 | 2.3407 |
+| MLR | 0.5108 | 2.9405 | 2.2686 |
+| Lasso | 0.4961 | 3.0044 | 2.3995 |
+| Baseline (Median) | -0.0810 | 4.7002 | 3.9539 |
+
+Random Forest achieved the highest mean R² and lowest mean RMSE among the evaluated models.
+
+### Tier Classification
+
+Predicted malaria case counts were converted back to their original scale using `expm1` before being assigned to their corresponding classification tiers.
+
+The classification thresholds were based on the training-set quartiles:
+
+* **Low:** Below Q1
+* **Medium:** From Q1 to Q3, inclusive
+* **High:** Above Q3
+
+Classification performance was evaluated using accuracy, confusion matrices, and per-tier precision, recall, and F1 scores.
+
+| Model | Accuracy | Macro F1 |
+|---|---:|---:|
+| Random Forest | 0.90 | 0.90 |
+| Lasso | 0.60 | 0.58 |
+| MLR | 0.55 | 0.50 |
+| Elastic Net | 0.55 | 0.54 |
+| Ridge | 0.50 | 0.46 |
+| Baseline (Median) | 0.45 | 0.21 |
+
+Random Forest correctly classified:
+
+* 4 out of 5 Low-burden countries
+* 8 out of 9 Medium-burden countries
+* 6 out of 6 High-burden countries
+
+<caption>Model comparison metrics</caption>
+
+![Model comparison metrics](figures/model_comparison_metrics.png)
+
+<caption>Confusion matrices across all evaluated models</caption>
+
+![Confusion matrices across all models](figures/confusion_matrices_all_models.png)
+
+### Sensitivity Analysis
+
+An additional sensitivity analysis was conducted by introducing total population as an eighth predictor.
+
+The analysis examined whether the findings from the original seven-predictor model remained consistent after accounting for total population.
+
+The results showed that:
+
+* Sanitation and European-region findings remained almost unchanged.
+* Total population was positively associated with malaria case counts (B = 0.664, p = .034).
+* Random Forest's cross-validated R² improved from 0.596 to 0.649.
+
+The seven-predictor model remained the final deployed model.
+
+---
+
+# Key Insights
+
+## 1. Sanitation Access Is the Most Consistent Predictor
+
+Sanitation access emerged as the most consistently influential factor across the evaluated models.
+
+It was statistically significant in OLS regression, ranked first in Random Forest feature importance with an importance score of 0.59, and remained influential after introducing total population in the sensitivity analysis.
+
+Countries with higher sanitation access generally had lower predicted malaria case counts.
+
+However, this represents an association and does not establish a causal relationship.
+
+## 2. Geographic Region Matters More Than Climate in This Analysis
+
+The European region was statistically associated with lower malaria case counts compared with the African reference region.
+
+In contrast, rainfall and temperature were not statistically significant predictors in the OLS analysis.
+
+This does not necessarily contradict research identifying climatic influences on malaria transmission. The country-level median approach and capital-city climate measurements may not capture localized or seasonal climate effects.
+
+## 3. Random Forest Performs Best in Tier Classification
+
+Random Forest achieved the highest cross-validated mean R² among the evaluated models and demonstrated the strongest classification performance on the held-out test set.
+
+Although MLR performed best on the individual 80/20 split for regression metrics, Random Forest demonstrated a stronger ability to distinguish between the three malaria case-count tiers.
+
+It correctly identified all six High-burden countries in the test set.
+
+Nevertheless, its lead in cross-validated R² over the linear models was relatively modest compared with its fold-to-fold variability.
+
+## 4. Classification Tiers Are More Appropriate Than Exact Predictions
+
+Malaria case counts exhibited substantial variability, and predictions had typical errors of approximately 17 times on the original scale.
+
+Consequently, presenting exact predicted case counts without context could create a misleading impression of precision.
+
+The Low, Medium, and High classifications provide a more interpretable representation of relative malaria case burden.
+
+## 5. Interpretability Matters in the Application
+
+Usability testing with three stakeholders produced an overall mean rating of 4.24 out of 5.
+
+Interface and design received the highest rating at 4.73.
+
+Participants also emphasized the importance of understandable explanations for the classification results, which informed the addition of plain-language tier descriptions to the application.
+
+---
+
+# Recommendations
+
+Based on the findings and limitations of the analysis, several recommendations were identified.
+
+### Public Health and Research Applications
+
+* Use the classification tiers for rough prioritization and preliminary assessment rather than exact malaria case forecasting.
+* Monitor sanitation access alongside malaria case burden, while recognizing that the observed association does not establish causation.
+* Interpret country-level estimates carefully, particularly for countries with substantial internal geographic and climatic variation.
+
+### Future Research
+
+* Expand country coverage as WHO reporting improves.
+* Investigate additional machine learning approaches, including Gradient Boosting and Stacking.
+* Replace capital-city climate measurements with population-weighted climate values.
+* Explore total population as an additional predictor.
+* Consider malaria incidence per 100,000 population as an alternative outcome.
+* Introduce subnational and time-series analysis to capture geographic and temporal variation.
+
+### Application Improvements
+
+* Add a color-coded overview of all 99 countries.
+* Implement CSV batch-prediction functionality.
+* Refine input field labels and tooltips.
+* Explore containerized deployment using Docker for more consistent application availability.
+* Introduce a retraining pipeline when WHO and World Bank datasets are updated.
+
+---
+
+# Tools & Technologies
+
+* **Python 3.10**
+* **Pandas**
+* **NumPy**
+* **SciPy**
+* **Scikit-learn**
+* **Statsmodels**
+* **Matplotlib**
+* **Seaborn**
+* **Streamlit**
+* **Joblib**
+* **Jupyter Notebook**
+* **VS Code**
+* **Conda**
+* **Git & GitHub**
+* **pip-tools**
+* **WHO Global Health Observatory**
+* **World Bank Open Data**
+* **Open-Meteo API**
+* **REST Countries API**
+* **Canva**
+
+### Workflow
+
+`Public Data Sources → Data Collection → Data Cleaning & Aggregation → Exploratory Analysis → Statistical Analysis → Model Training & Evaluation → Tier Classification → Streamlit Application → System & Usability Testing`
+
+---
+
+# Project Structure
+
+```text
+Capstone2-A3101-Group2-SY26-27/
+├── app/
+│   ├── __pycache__/
+│   ├── app_ui.py
+│   └── validation.py
+├── figures/
+│   ├── confusion_matrices_all_models.png
+│   └── model_comparison_metrics.png
+├── ipynb_notebooks/
+│   ├── 01_data_cleaning.ipynb
+│   ├── 02_model_training.ipynb
+│   ├── 03_sensitivity_analysis.ipynb
+│   ├── 04_model_training_with_datamining.ipynb
+│   ├── Capstone2-A3101-Group2-SY26-27.code-workspace
+│   ├── country_coordinates.csv
+│   ├── fig11.png
+│   ├── fig12.png
+│   ├── final_extract_dataset.csv
+│   ├── final_malaria_dataset_1.jasp
+│   ├── final_malaria_dataset.jasp
+│   ├── median_malaria_per_nation.csv
+│   ├── rainfall_cache.csv
+│   └── temp_cache.csv
+├── models/
+│   ├── model_Baseline_Median.pkl
+│   ├── model_ElasticNet.pkl
+│   ├── model_Lasso.pkl
+│   ├── model_MLR.pkl
+│   ├── model_RandomForest.pkl
+│   ├── model_Ridge.pkl
+│   ├── tier_thresholds.pkl
+│   └── your_model_file.pkl
+├── spreadsheets/
+│   ├── GDP_data/
+│   ├── Population_density/
+│   ├── API_SH.XPD.CHEX.GD.ZS_DS2_en_csv_v2_33342.csv
+│   ├── API_SP.POP.TOTL_DS2_en_csv_v2_5254.csv
+│   ├── health_expednditure_per_GDP.csv
+│   ├── healthcaare_expenditure_updated.csv
+│   ├── healthcare expenditure.csv
+│   ├── malaria.csv
+│   ├── medical_capacity.csv
+│   ├── urbanization.csv
+│   └── washdata.csv
+├── test_env/
+│   ├── bin/
+│   ├── etc/
+│   ├── include/
+│   ├── lib/
+│   ├── share/
+│   └── pyvenv.cfg
+├── tests/
+│   └── test_validation_state.py
+├── .gitignore
+├── README.md
+├── requirements.in
+└── requirements.txt
+```
+
+---
+
+# Conclusion
+
+This project explored the relationships between climatic, socioeconomic, and demographic indicators and national malaria case burden across 99 countries.
+
+The analysis demonstrated that regression-based machine learning can provide an interpretable, multi-country approach to estimating relative malaria case burden. Random Forest achieved 90% classification accuracy on the held-out test set and correctly identified all six High-burden countries.
+
+Sanitation access emerged as the most consistent factor associated with malaria case burden across the evaluated models, while geographic region also demonstrated statistical significance.
+
+More broadly, the project demonstrates how **data collection, cleaning, statistical inference, machine learning, model evaluation, and application development can be combined into an end-to-end data analytics solution**.
+
+The final Streamlit application translates the model's outputs into accessible classifications, making the results easier to interpret without overstating the precision of the predictions.
+
+The findings are promising rather than definitive, particularly given the relatively small dataset and the limitations of country-level climate measurements.
+
+---
+
+# Author
+
+**David Zachary Ilaigilag Malonjao**
+
+BSIT Data Analytics Student | Mapúa Malayan Digital College
+
+**Team Members:** Caylyne Janae Lucero · Jose Martin Marquez · Jovelyn Plaga
+
+**Adviser:** John Edmon Alcomendas
+
+**Skills demonstrated:** Python · Pandas · NumPy · Data Cleaning · Exploratory Data Analysis · Statistical Analysis · OLS Regression · Machine Learning · Regression Modeling · Random Forest · Model Evaluation · Feature Engineering · Data Visualization · Streamlit Development · Input Validation · Software Testing · Git & GitHub
+
+**GitHub Repository:**
+
+[Capstone2-A3101-Group2-SY26-27](https://github.com/ZacharyMalonjao/Capstone2-A3101-Group2-SY26-27)
+
+**Live Application:**
+
+[Malaria Prediction Tool – Streamlit](https://malaria-prediction-tool.streamlit.app/)
