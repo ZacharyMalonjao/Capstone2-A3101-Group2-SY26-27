@@ -12,7 +12,18 @@ The project combines **Python data preparation, statistical analysis, and machin
 * **Population size matters when comparing countries.** Adding total population to the analysis improved the Random Forest model's performance, suggesting that the number of people living in a country provides additional information when estimating its malaria burden.
 * **Malaria burden categories are more useful than exact predictions.** The model's estimated case counts could differ substantially from actual figures. Presenting results as Low, Medium, or High therefore provides a more practical and understandable way to compare countries without implying that the model can predict exact case counts.
 * **The application was positively received during usability testing.** Three participants gave the application an average rating of 4.24 out of 5, with interface and design receiving the highest rating of 4.73. This highlights the importance of presenting analytical results through an accessible interface, not just developing an accurate model.
-* 
+
+# Recommendations
+
+Based on the findings and limitations of the analysis, several recommendations were identified.
+
+### Public Health and Research Applications
+
+* **Prioritize countries for further assessment.** Use the Low, Medium, and High classifications as an initial screening tool to identify countries that may require closer examination, rather than treating the predictions as definitive assessments.
+* **Consider sanitation conditions in public health assessments.** Since sanitation access was consistently associated with malaria case burden, it may be useful to monitor sanitation alongside other public health indicators.
+* **Consider population size when comparing countries.** Larger populations can contribute to higher total case counts, making population an important factor when interpreting differences in national malaria burden.
+
+
 ## Application
 
 The final Streamlit application allows users to enter country-level demographic, socioeconomic, and climatic indicators to estimate relative malaria case burden.
@@ -334,7 +345,7 @@ Participants also emphasized the importance of understandable explanations for t
 
 ---
 
-# Recommendations
+# Further Recommendations
 
 Based on the findings and limitations of the analysis, several recommendations were identified.
 
