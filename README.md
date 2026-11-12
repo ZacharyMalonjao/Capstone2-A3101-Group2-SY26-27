@@ -497,7 +497,7 @@ BSIT Data Analytics Student | Mapúa Malayan Digital College
 
 **GitHub Repository:**
 
-[Capstone2-A3101-Group2-SY26-27](https://github.com/ZacharyMalonjao/Capstone2-A3101-Group2-SY26-27)
+[malaria-case-burden](https://github.com/ZacharyMalonjao/malaria-prediction-burden)
 
 **Live Application:**
 
