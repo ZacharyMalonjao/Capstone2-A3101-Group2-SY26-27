@@ -502,16 +502,14 @@ tier_help_html = (
 empty_note_html = ""
 if st.session_state.prediction is None:
     empty_msg = (
-        "No prediction yet. Fix the inputs on the left and try again."
+        "No prediction yet. Fix the inputs above and try again."
         if st.session_state.validation_errors
         else "Enter values and click Predict."
     )
     empty_note_html = f'<p class="tier-desc">{empty_msg}</p>'
 
-left, right = st.columns([3, 2], gap="large")
-
-# 1. INPUTS 
-with left:
+# 1. INPUTS
+with st.container():
     with st.container(border=True):
         region_label = st.selectbox(
             "WHO Epidemiological Region",
@@ -595,24 +593,27 @@ with left:
             )
    
 
-# 2. ACTION + 3. RESULT
-with right:
-    predict_col, reset_col = st.columns(2)
-    with predict_col:
-        predict_clicked = st.button(
-            "Predict",
-            width="stretch",
-            help=HELP["predict_btn"],
-        )
-    with reset_col:
-        reset_clicked = st.button(
-            "Reset",
-            width="stretch",
-            help=HELP["reset_btn"],
-        )
+# 2. ACTION
+button_spacer_left, predict_col, reset_col, button_spacer_right = st.columns(4)
+with predict_col:
+    predict_clicked = st.button(
+        "Predict",
+        width="stretch",
+        help=HELP["predict_btn"],
+    )
+with reset_col:
+    reset_clicked = st.button(
+        "Reset",
+        width="stretch",
+        help=HELP["reset_btn"],
+    )
 
-    render_validation_messages()
+# Keep validation feedback between the actions and result panel.
+render_validation_messages()
 
+# 3. RESULT
+result_spacer_left, result_col, result_spacer_right = st.columns([1, 3, 1])
+with result_col:
     with st.container(border=True):
         st.markdown(
             f"""
